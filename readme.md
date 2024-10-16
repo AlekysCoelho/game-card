@@ -6,7 +6,7 @@
 
 <div style="display: inline_block">
     <br>
-    <img align="center" alt="GO" height="30" width="40" src="https://github.com/devicons/devicon/tree/master/icons/go" />
+    <img align="center" alt="GO" height="30" width="40" src="https://github.com/devicons/devicon/blob/master/icons/go/go-original.svg" />
 </div>
 
 ## Problem Description
