@@ -1,4 +1,13 @@
-![Imagem que representa o jogo, onde estão quatro jogadores em circulos e entre cada par de jogador uma pila de cartas.](URL_da_Imagem)
+# Game Cards
+
+<div>
+    <img height="180em" src="./assets/structure-game-card.png" alt="Imagem que representa o jogo, onde estão quatro jogadores em circulos e entre cada par de jogador uma pila de cartas." />
+</div>
+
+<div style="display: inline_block">
+    <br>
+    <img align="center" alt="GO" height="30" width="40" src="https://github.com/devicons/devicon/tree/master/icons/go" />
+</div>
 
 ## Problem Description
 - Consider a deck of 24 cards, divided into 6 different types, with 4 cards of each suit. For standardization, we use cards numbered 1 to 6 and the suits O, C, E, and P.
