@@ -1,7 +1,7 @@
 # Game Cards
 
 <div>
-    <img height="180em" src="./assets/structure-game-card.png" alt="Imagem que representa o jogo, onde estão quatro jogadores em circulos e entre cada par de jogador uma pila de cartas." />
+    <img height="500em" src="./assets/structure-game-card.png" alt="Imagem que representa o jogo, onde estão quatro jogadores em circulos e entre cada par de jogador uma pila de cartas." />
 </div>
 
 <div style="display: inline_block">
