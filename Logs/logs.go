@@ -5,9 +5,11 @@ import (
 	"os"
 )
 
-func LogDefault() (logger *slog.Logger) {
+func logDefault() (logger *slog.Logger) {
 	logJson := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	slog.SetDefault(logJson)
 	logger = logJson
 	return
 }
+
+var Log = logDefault()
