@@ -26,7 +26,7 @@ func GenerateCardsForTheDeck(d *deck.Deck, ranks, suits []string) []string {
 // Dealing the cards to the player. Function to distribute cards to the player
 // Deck: deck of cards
 // player: Player's hand
-func CardsPartitionForPlayer(d *deck.Deck, player *player.Player) error {
+func DealCardsToPlayers(d *deck.Deck, player *player.Player) error {
 	if len(d.Cards) == 0 {
 		return errors.New("deck is empty")
 	}
@@ -37,6 +37,8 @@ func CardsPartitionForPlayer(d *deck.Deck, player *player.Player) error {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	for i := 0; i <= 4; i++ {
 		index := r.Intn(len(d.Cards))
+		card := d.Cards[index]
+		player.Hand = append(player.Hand, card)
 		d.Cards = append(d.Cards[:index], d.Cards[index+1:]...)
 	}
 
