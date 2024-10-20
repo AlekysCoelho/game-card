@@ -2,8 +2,9 @@ package utils
 
 import (
 	"errors"
-	deck "game-card/Deck"
-	player "game-card/Player"
+	deck "game-card/deck"
+	pile "game-card/pile"
+	player "game-card/player"
 	"math/rand"
 	"time"
 )
@@ -41,19 +42,20 @@ func GenerateCardsForTheDeck(deck deck.DeckInterface, ranks, suits []string) {
 // Dealing the cards to the player. Function to distribute cards to the player
 // Deck: deck of cards
 // player: Player's hand
-func DealCardsToPlayer(d *deck.Deck, player *player.Player) error {
-	if len(d.Cards) == 0 {
+func DealCardsToPlayer(d deck.DeckInterface, player player.PlayerInterface) error {
+
+	if len(d.GetCards()) == 0 {
 		return errors.New("deck is empty")
 	}
-	if len(player.Hand) != 0 {
+	if player.HasCard() {
 		return errors.New("your hand already has cards")
 	}
 
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
-	for i := 0; i <= 4; i++ {
-		index := r.Intn(len(d.Cards))
+	for i := 0; i < 4; i++ {
+		index := r.Intn(len(d.GetCards()))
 		card := d.RemoverCard(index)
-		player.GetCard(card)
+		player.GetCardToHand(card)
 		//card := d.Cards[index]
 		//player.Hand = append(player.Hand, card)
 		//d.Cards = append(d.Cards[:index], d.Cards[index+1:]...)
@@ -62,4 +64,24 @@ func DealCardsToPlayer(d *deck.Deck, player *player.Player) error {
 	return nil
 }
 
-func CountsTheFrequencyOfNumbersInAHandOfCards(cards []string) {}
+// Dealing the cards to the pile. Function to distribute cards to the pile
+// Deck: deck of cards
+// pile: Pile's Cards
+func DealCardsToPile(d deck.DeckInterface, pile pile.PileInterface) error {
+	if len(d.GetCards()) == 0 {
+		return errors.New("deck is empty")
+	}
+
+	if pile.HasCard() {
+		return errors.New("your hand already has cards")
+	}
+
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	for i := 0; i < 2; i++ {
+		index := r.Intn(len(d.GetCards()))
+		card := d.RemoverCard(index)
+		pile.Push(card)
+	}
+
+	return nil
+}

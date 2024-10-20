@@ -1,6 +1,14 @@
 package pile
 
-import logs "game-card/Logs"
+import (
+	logs "game-card/Logs"
+)
+
+type PileInterface interface {
+	Push(card string)
+	Pop() string
+	HasCard() bool
+}
 
 // Represents the pile of cards.
 // Cards: stores the cards.
@@ -33,13 +41,18 @@ func (p *Pile) Push(card string) {
 
 // Method for removing a card from the pile.
 // Remove the first card; FIFO
-func (p *Pile) Pop() []string {
+func (p *Pile) Pop() string {
 	if len(p.Cards) == 0 {
 		logs.Log.Warn("Empty pile", "Pile", p.Name, "Cards", p.Cards)
-		return []string{""}
+		return ""
 	}
-	card := p.Cards[:1]
+	card := p.Cards[len(p.Cards)-1]
 	p.Cards = p.Cards[1:]
 
 	return card
+}
+
+// Checks if the pile has cards.
+func (p *Pile) HasCard() bool {
+	return len(p.Cards) >= 1
 }

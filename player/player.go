@@ -1,10 +1,11 @@
 package player
 
-import pile "game-card/Pile"
+import pile "game-card/pile"
 
 type PlayerInterface interface {
-	GetCard(card string)
+	GetCardToHand(card string)
 	HasFourHand() bool
+	HasCard() bool
 }
 
 type Player struct {
@@ -26,7 +27,7 @@ func NewPlayer(name string, hand []string, leftPile, rightPile *pile.Pile, numbe
 }
 
 // Player takes a card and puts it in his hand.
-func (p *Player) GetCard(card string) {
+func (p *Player) GetCardToHand(card string) {
 	p.Hand = append(p.Hand, card)
 }
 
@@ -38,9 +39,10 @@ func (p *Player) HasFourHand() bool {
 		numbersFrequency[string(card[0])]++
 	}
 
-	if len(numbersFrequency) == 1 {
-		return true
-	}
+	return len(numbersFrequency) == 1
+}
 
-	return false
+// Checks if the hand has cards.
+func (p *Player) HasCard() bool {
+	return len(p.Hand) >= 1
 }

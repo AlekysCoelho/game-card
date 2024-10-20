@@ -3,6 +3,7 @@ package deck
 type DeckInterface interface {
 	AddCards(cards []string)
 	RemoverCard(index int) string
+	GetCards() []string
 }
 
 // Represents the deck of cards.
@@ -18,4 +19,8 @@ func (d *Deck) RemoverCard(index int) string {
 	card := d.Cards[index]
 	d.Cards = append(d.Cards[:index], d.Cards[index+1:]...)
 	return card
+}
+
+func (d *Deck) GetCards() []string {
+	return d.Cards
 }
