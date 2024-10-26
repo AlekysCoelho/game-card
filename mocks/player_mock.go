@@ -8,7 +8,7 @@ func (m *MockPlayer) GetCardToHand(card string) {
 	m.Hand = append(m.Hand, card)
 }
 
-func (p *MockPlayer) HasFourHand() bool {
+func (p *MockPlayer) HasFourEqualCards() bool {
 	numbersFrequency := make(map[string]int)
 
 	for _, card := range p.Hand {

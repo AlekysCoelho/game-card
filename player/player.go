@@ -4,7 +4,7 @@ import pile "game-card/pile"
 
 type PlayerInterface interface {
 	GetCardToHand(card string)
-	HasFourHand() bool
+	HasFourEqualCards() bool
 	HasCard() bool
 }
 
@@ -32,7 +32,7 @@ func (p *Player) GetCardToHand(card string) {
 }
 
 // Checks if the player has a Four hand.
-func (p *Player) HasFourHand() bool {
+func (p *Player) HasFourEqualCards() bool {
 	numbersFrequency := make(map[string]int)
 
 	for _, card := range p.Hand {
