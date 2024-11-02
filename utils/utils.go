@@ -56,9 +56,6 @@ func DealCardsToPlayer(d deck.DeckInterface, player player.PlayerInterface) erro
 		index := r.Intn(len(d.GetCards()))
 		card := d.RemoverCard(index)
 		player.GetCardToHand(card)
-		//card := d.Cards[index]
-		//player.Hand = append(player.Hand, card)
-		//d.Cards = append(d.Cards[:index], d.Cards[index+1:]...)
 	}
 
 	return nil
