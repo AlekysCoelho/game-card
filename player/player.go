@@ -1,6 +1,12 @@
 package player
 
-import pile "game-card/pile"
+import (
+	logs "game-card/Logs"
+	game "game-card/game"
+	pile "game-card/pile"
+	"sync"
+	"time"
+)
 
 type PlayerInterface interface {
 	GetCardToHand(card string)
@@ -11,9 +17,10 @@ type PlayerInterface interface {
 type Player struct {
 	Name         string
 	Hand         []string
-	LeftPile     *pile.Pile
-	RightPile    *pile.Pile
+	LeftPile     pile.PileInterface
+	RightPile    pile.PileInterface
 	NumberOfPlay int
+	Won          bool
 }
 
 func NewPlayer(name string, hand []string, leftPile, rightPile *pile.Pile, numberOfPlay int) *Player {
@@ -45,4 +52,28 @@ func (p *Player) HasFourEqualCards() bool {
 // Checks if the hand has cards.
 func (p *Player) HasCard() bool {
 	return len(p.Hand) >= 1
+}
+
+// Function for the player to play.
+// Discard a card from the left pile and take a card from the right pile.
+// The player will win if he makes a hand Four.
+func (p *Player) Play(wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	for !p.Won {
+
+		indiceCard := game.ReturnsTheLowestFrequencyAmongCards(p.Hand)
+		cardToDiscard := game.DiscardTheCardWithLowestFrequency(p.Hand, indiceCard)
+		p.LeftPile.Push(cardToDiscard)
+
+		newCard := p.RightPile.Pop()
+		p.Hand = append(p.Hand, newCard)
+
+		if p.HasFourEqualCards() {
+			p.Won = true
+			logs.Log.Info("We have a winner!", "Player", p.Name, "Cards", p.Hand)
+		}
+
+		time.Sleep(time.Microsecond * 100)
+	}
 }

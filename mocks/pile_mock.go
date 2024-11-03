@@ -1,6 +1,7 @@
 package mocks
 
 type MockPile struct {
+	Name  string
 	Cards []string
 	ch    chan string
 }
