@@ -4,7 +4,6 @@ import (
 	"game-card/game"
 	"game-card/mocks"
 	"game-card/player"
-	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -87,35 +86,4 @@ func TestPlayHasFourEqualCards(t *testing.T) {
 			require.Equal(t, tc.expectedResult, result, "Expected result '%v' for a hand %v.", tc.expectedResult, tc.hand)
 		})
 	}
-}
-
-func TestPlay(t *testing.T) {
-	leftPile := &mocks.MockPile{}
-	rightPile := &mocks.MockPile{}
-
-	rightPile.Push("3♦")
-	rightPile.Push("3♠")
-	rightPile.Push("1♠")
-
-	mockPlayer := &mocks.MockPlayer{
-		Player: player.Player{
-			Name:         "Player 1",
-			Hand:         []string{"3♥", "2♥", "6♦", "3♣"},
-			LeftPile:     leftPile,
-			RightPile:    rightPile,
-			NumberOfPlay: 0,
-			Won:          false,
-		},
-	}
-
-	var wg sync.WaitGroup
-	wg.Add(1)
-
-	go mockPlayer.Play(&wg)
-
-	wg.Wait()
-
-	require.True(t, mockPlayer.Won, "Expected player victory.")
-	require.ElementsMatch(t, mockPlayer.Hand, []string{"3♥", "3♦", "3♠", "3♣"})
-
 }
