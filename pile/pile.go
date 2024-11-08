@@ -8,6 +8,7 @@ type PileInterface interface {
 	Push(card string)
 	Pop() string
 	HasCard() bool
+	Capacity() (int, int)
 }
 
 // Represents the pile of cards.
@@ -28,8 +29,6 @@ func NewPile(name string, size int) *Pile {
 	}
 }
 
-// Method for adding card to the pile.
-// Add the card at the end.
 func (p *Pile) Push(card string) {
 	if len(p.Cards) < cap(p.Cards) {
 		p.Cards = append(p.Cards, card)
@@ -47,7 +46,7 @@ func (p *Pile) Pop() string {
 		return ""
 	}
 	card := p.Cards[len(p.Cards)-1]
-	p.Cards = p.Cards[1:]
+	p.Cards = p.Cards[:len(p.Cards)-1]
 
 	return card
 }
@@ -55,4 +54,9 @@ func (p *Pile) Pop() string {
 // Checks if the pile has cards.
 func (p *Pile) HasCard() bool {
 	return len(p.Cards) >= 1
+}
+
+// Função para ver a capacidade de `Cards` e `ch`
+func (p *Pile) Capacity() (int, int) {
+	return cap(p.Cards), cap(p.ch)
 }

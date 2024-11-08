@@ -1,6 +1,7 @@
 package mocks
 
 import (
+	"fmt"
 	"game-card/player"
 	"sync"
 )
@@ -9,6 +10,16 @@ type MockPlayer struct {
 	player.Player
 }
 
+func (p *MockPlayer) RemoveCard(cardLowerFrequency string) (card string) {
+	fmt.Println("REMOVENDO A CARTA")
+	for index, card := range p.Hand {
+		if string(card[0]) == cardLowerFrequency {
+			p.Hand = append(p.Hand[:index], p.Hand[index+1:]...)
+			return card
+		}
+	}
+	return ""
+}
 func (mp *MockPlayer) GetCardToHand(card string) {
 	mp.Hand = append(mp.Hand, card)
 }

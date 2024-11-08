@@ -12,6 +12,7 @@ type PlayerInterface interface {
 	GetCardToHand(card string)
 	HasFourEqualCards() bool
 	HasCard() bool
+	RemoveCard(cardLowerFrequency string) (card string)
 }
 
 type Player struct {
@@ -31,6 +32,17 @@ func NewPlayer(name string, hand []string, leftPile, rightPile *pile.Pile, numbe
 		RightPile:    rightPile,
 		NumberOfPlay: numberOfPlay,
 	}
+}
+
+func (p *Player) RemoveCard(cardLowerFrequency string) (card string) {
+
+	for index, card := range p.Hand {
+		if string(card[0]) == cardLowerFrequency {
+			p.Hand = append(p.Hand[:index], p.Hand[index+1:]...)
+			return card
+		}
+	}
+	return ""
 }
 
 // Player takes a card and puts it in his hand.
@@ -62,8 +74,10 @@ func (p *Player) Play(wg *sync.WaitGroup) {
 
 	for !p.Won {
 
-		indiceCard := game.ReturnsTheLowestFrequencyAmongCards(p.Hand)
-		cardToDiscard := game.DiscardTheCardWithLowestFrequency(p.Hand, indiceCard)
+		cardLowerFrequency := game.ReturnsTheLowestFrequencyAmongCards(p.Hand)
+
+		cardToDiscard := p.RemoveCard(cardLowerFrequency)
+
 		p.LeftPile.Push(cardToDiscard)
 
 		newCard := p.RightPile.Pop()
