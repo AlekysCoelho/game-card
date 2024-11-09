@@ -10,9 +10,9 @@
 </div>
 
 ## Problem Description
-- Consider a deck of 24 cards, divided into 6 different types, with 4 cards of each suit. For standardization, we use cards numbered 1 to 6 and the suits O, C, E, and P.
+- Consider a deck of 24 cards, divided into 6 different types, with 4 cards of each suit. For standardization, we use cards numbered 1 to 6 and the suits ♠, ♥, ♦, and ♣.
 
-- The cards that will be used are: 1O, 1C, 1E, 1P, 2O, 2C, 2E, 2P, 3O, 3C, 3E, 3P, 4O, 4C, 4E, 4P, 5O, 5C, 5E, 5P, 6O, 6C, 6E, and 6P.
+- The cards that will be used are: 1♠, 1♥, 1♦, 1♣, 2♠, 2♥, 2♦, 2♣, 3♠, 3♥, 3♦, 3♣, 4♠, 4♥, 4♦, 4♣, 5♠, 5♥, 5♦, 5♣, 6♠, 6♥, 6♦, and 6♣.
 
 - Four players (processes/threads) will play, and each player can hold 4 cards at a time. Between each pair of adjacent players (i.e., sitting next to each other), there is a stack of 2 cards.
 
