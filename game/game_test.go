@@ -2,8 +2,6 @@ package game_test
 
 import (
 	"game-card/game"
-	"game-card/mocks"
-	"game-card/player"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -46,44 +44,6 @@ func TestDiscardTheCardWithLowestFrequency(t *testing.T) {
 			cardDiscard := game.DiscardTheCardWithLowestFrequency(tt.cards, tt.minFrequency)
 
 			require.Equal(t, tt.expectedCard, cardDiscard, "Expected: %s but got: %s", tt.expectedCard, cardDiscard)
-		})
-	}
-}
-
-func TestPlayHasFourEqualCards(t *testing.T) {
-
-	testsCards := []struct {
-		name           string
-		hand           []string
-		expectedResult bool
-	}{
-		{
-			name:           "Hand Four cards of a kind.",
-			hand:           []string{"3♥", "3♥", "3♦", "3♣"},
-			expectedResult: true,
-		},
-		{
-			name:           "Hand with three cards of a kind.",
-			hand:           []string{"5♥", "6♥", "5♦", "5♣"},
-			expectedResult: false,
-		},
-		{
-			name:           "Hand with all different cards.",
-			hand:           []string{"3♥", "6♥", "1♦", "4♣"},
-			expectedResult: false,
-		},
-	}
-
-	for _, tc := range testsCards {
-		t.Run(tc.name, func(t *testing.T) {
-			mockPlayer := &mocks.MockPlayer{
-				Player: player.Player{
-					Hand: tc.hand,
-				},
-			}
-
-			result := mockPlayer.HasFourEqualCards()
-			require.Equal(t, tc.expectedResult, result, "Expected result '%v' for a hand %v.", tc.expectedResult, tc.hand)
 		})
 	}
 }

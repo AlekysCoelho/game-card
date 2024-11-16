@@ -7,56 +7,55 @@ import (
 type PileInterface interface {
 	Push(card string)
 	Pop() string
-	HasCard() bool
 	Capacity() (int, int)
+	GetName() string
 }
 
 // Represents the pile of cards.
 // Cards: stores the cards.
 // ch: channel for manipulating cards in the pile.
 type Pile struct {
-	Name  string
-	Cards []string
-	ch    chan string
+	Name string
+	// Cards []string
+	ch chan string
 }
 
 // New Pile instance.
 func NewPile(name string, size int) *Pile {
 	return &Pile{
-		Name:  name,
-		Cards: make([]string, 0, size),
-		ch:    make(chan string, size),
+		Name: name,
+		// Cards: make([]string, 0, size),
+		ch: make(chan string, size),
 	}
 }
 
 func (p *Pile) Push(card string) {
-	if len(p.Cards) < cap(p.Cards) {
-		p.Cards = append(p.Cards, card)
-		p.ch <- card
-	} else {
-		logs.Log.Warn("Full pile", "Pile", p.Name, "Cards", p.Cards)
+	select {
+	case p.ch <- card:
+		logs.Log.Info("Stack Push", "Stack", p.Name, "Added card", card)
+	default:
+		logs.Log.Warn("Stack Full", "Stack", p.Name, "Cannot add card", card)
 	}
 }
 
 // Method for removing a card from the pile.
 // Remove the first card; FIFO
 func (p *Pile) Pop() string {
-	if len(p.Cards) == 0 {
-		logs.Log.Warn("Empty pile", "Pile", p.Name, "Cards", p.Cards)
+	select {
+	case card := <-p.ch:
+		logs.Log.Info("Stack Pop", "Stack", p.Name, "Removed card", card)
+		return card
+	default:
+		logs.Log.Warn("Stack Empty", "Stack", p.Name)
 		return ""
 	}
-	card := p.Cards[len(p.Cards)-1]
-	p.Cards = p.Cards[:len(p.Cards)-1]
-
-	return card
 }
 
-// Checks if the pile has cards.
-func (p *Pile) HasCard() bool {
-	return len(p.Cards) >= 1
-}
-
-// Função para ver a capacidade de `Cards` e `ch`
+// Função para ver a capacidade e o tamanho do canal
 func (p *Pile) Capacity() (int, int) {
-	return cap(p.Cards), cap(p.ch)
+	return len(p.ch), cap(p.ch)
+}
+
+func (p *Pile) GetName() string {
+	return p.Name
 }

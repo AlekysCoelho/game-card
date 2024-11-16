@@ -8,11 +8,16 @@ import (
 	"time"
 )
 
+var (
+	mu sync.Mutex
+)
+
 type PlayerInterface interface {
 	GetCardToHand(card string)
 	HasFourEqualCards() bool
 	HasCard() bool
-	RemoveCard(cardLowerFrequency string) (card string)
+	RemoveCard(cardLowerFrequency string)
+	// RemoveCard(cardLowerFrequency string) (card string)
 }
 
 type Player struct {
@@ -34,19 +39,21 @@ func NewPlayer(name string, hand []string, leftPile, rightPile *pile.Pile, numbe
 	}
 }
 
-func (p *Player) RemoveCard(cardLowerFrequency string) (card string) {
+func (p *Player) RemoveCard(cardLowerFrequency string) {
 
 	for index, card := range p.Hand {
 		if string(card[0]) == cardLowerFrequency {
 			p.Hand = append(p.Hand[:index], p.Hand[index+1:]...)
-			return card
+			logs.Log.Info("Player RemoveCard", "Player", p.Name, "Hand", p.Hand, "Carta Removida", card)
+			p.LeftPile.Push(card)
+			return
 		}
 	}
-	return ""
 }
 
 // Player takes a card and puts it in his hand.
 func (p *Player) GetCardToHand(card string) {
+	logs.Log.Info("Player GetCard", "Player", p.Name, "Hand", p.Hand, "Pegou a carta", card)
 	p.Hand = append(p.Hand, card)
 }
 
@@ -69,25 +76,50 @@ func (p *Player) HasCard() bool {
 // Function for the player to play.
 // Discard a card from the left pile and take a card from the right pile.
 // The player will win if he makes a hand Four.
-func (p *Player) Play(wg *sync.WaitGroup) {
+func (p *Player) Play(wg *sync.WaitGroup, gameFinished chan bool) {
 	defer wg.Done()
+	logs.Log.Info("Começou a jogar", "Player", p.Name, "Hand", p.Hand)
 
 	for !p.Won {
 
-		cardLowerFrequency := game.ReturnsTheLowestFrequencyAmongCards(p.Hand)
+		select {
+		case <-gameFinished:
+			// O jogo acabou
+			logs.Log.Info("Game Finished", "Player stops playing as game is over.", p.Name)
+			return
+		default:
 
-		cardToDiscard := p.RemoveCard(cardLowerFrequency)
+			lenPile, capPile := p.LeftPile.Capacity()
 
-		p.LeftPile.Push(cardToDiscard)
+			if lenPile < capPile {
+				cardLowerFrequency := game.ReturnsTheLowestFrequencyAmongCards(p.Hand)
+				p.RemoveCard(cardLowerFrequency)
+				// cardToDiscard := p.RemoveCard(cardLowerFrequency)
+				// p.LeftPile.Push(cardToDiscard)
+				if len(p.Hand) < 4 {
 
-		newCard := p.RightPile.Pop()
-		p.Hand = append(p.Hand, newCard)
+					newCard := p.RightPile.Pop()
+					if len(newCard) == 0 {
+						return
+					}
+					p.Hand = append(p.Hand, newCard)
+					logs.Log.Info("Pegou uma carta", "Player", p.Name, "Hand", p.Hand, "Carta pegue", newCard)
+				}
+			}
 
-		if p.HasFourEqualCards() {
-			p.Won = true
-			logs.Log.Info("We have a winner!", "Player", p.Name, "Cards", p.Hand)
+			if p.HasFourEqualCards() {
+				p.Won = true
+				logs.Log.Info("SUCCESS -> We have a winner!", "Player", p.Name, "Cards", p.Hand)
+
+				mu.Lock()
+				gameFinished <- true
+				mu.Unlock()
+
+				return
+			}
+
+			time.Sleep(time.Microsecond * 100)
 		}
 
-		time.Sleep(time.Microsecond * 100)
 	}
 }

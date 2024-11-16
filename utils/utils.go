@@ -69,9 +69,9 @@ func DealCardsToPile(d deck.DeckInterface, pile pile.PileInterface) error {
 		return errors.New("deck is empty")
 	}
 
-	if pile.HasCard() {
-		return errors.New("your hand already has cards")
-	}
+	// if pile.HasCard() {
+	// 	return errors.New("your hand already has cards")
+	// }
 
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	for i := 0; i < 2; i++ {
