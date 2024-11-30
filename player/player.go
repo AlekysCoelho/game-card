@@ -17,7 +17,6 @@ type PlayerInterface interface {
 	HasFourEqualCards() bool
 	HasCard() bool
 	RemoveCard(cardLowerFrequency string)
-	// RemoveCard(cardLowerFrequency string) (card string)
 }
 
 type Player struct {
@@ -84,7 +83,7 @@ func (p *Player) Play(wg *sync.WaitGroup, gameFinished chan bool) {
 
 		select {
 		case <-gameFinished:
-			// O jogo acabou
+			// The game is over
 			logs.Log.Info("Game Finished", "Player stops playing as game is over.", p.Name)
 			return
 		default:
@@ -94,8 +93,6 @@ func (p *Player) Play(wg *sync.WaitGroup, gameFinished chan bool) {
 			if lenPile < capPile {
 				cardLowerFrequency := game.ReturnsTheLowestFrequencyAmongCards(p.Hand)
 				p.RemoveCard(cardLowerFrequency)
-				// cardToDiscard := p.RemoveCard(cardLowerFrequency)
-				// p.LeftPile.Push(cardToDiscard)
 				if len(p.Hand) < 4 {
 
 					newCard := p.RightPile.Pop()

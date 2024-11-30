@@ -18,38 +18,37 @@ var (
 
 func main() {
 
-	// Gerando o Deck
+	// Generating the Deck
 	deckCards := deck.Deck{}
 
 	utils.GenerateCardsForTheDeck(&deckCards, ranks, suits)
-	// fmt.Println(deckCards)
 
-	// Criando as Pilhas
+	// Creating the Stacks
 	pileOne := pile.NewPile("Ana-Beto", 3)
 	pileTwo := pile.NewPile("Beto-Carla", 3)
 	pileThree := pile.NewPile("Carla-Daniel", 3)
 	pileFour := pile.NewPile("Daniel-Ana", 3)
 
-	// Gerando cartas para as pilhas
+	// Generating cards for the stacks
 	utils.DealCardsToPile(&deckCards, pileOne)
 	utils.DealCardsToPile(&deckCards, pileTwo)
 	utils.DealCardsToPile(&deckCards, pileThree)
 	utils.DealCardsToPile(&deckCards, pileFour)
 
-	// Criando os jogadores
+	// Creating the players
 	players := []*player.Player{}
 	playerAna := player.NewPlayer("Ana", []string{}, pileOne, pileFour, 0)
 	playerBeto := player.NewPlayer("Beto", []string{}, pileTwo, pileOne, 0)
 	playerCarla := player.NewPlayer("Carla", []string{}, pileThree, pileTwo, 0)
 	playerDaniel := player.NewPlayer("Daniel", []string{}, pileFour, pileThree, 0)
 
-	// Gerando cartas para os jogadores
+	// Generating cards for players
 	utils.DealCardsToPlayer(&deckCards, playerAna)
 	utils.DealCardsToPlayer(&deckCards, playerBeto)
 	utils.DealCardsToPlayer(&deckCards, playerCarla)
 	utils.DealCardsToPlayer(&deckCards, playerDaniel)
 
-	// Imprimindo as pilhas
+	// Printing the stacks
 	fmt.Println("********************** Piles **************************************")
 	fmt.Println(pileOne)
 	fmt.Println(pileTwo)
@@ -57,7 +56,7 @@ func main() {
 	fmt.Println(pileFour)
 	fmt.Println("***********************************************************************")
 
-	// Imprimindo os jogadores
+	// Printing the players
 	fmt.Println("********************** Players **************************************")
 	fmt.Println(playerAna)
 	fmt.Println(playerBeto)

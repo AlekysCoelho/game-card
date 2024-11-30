@@ -36,7 +36,6 @@ func (m *MockPile) HasCard() bool {
 	return len(m.Cards) >= 1
 }
 
-// Função para ver a capacidade de `Cards` e `ch`
 func (m *MockPile) Capacity() (int, int) {
 	return len(m.ch), cap(m.ch)
 }

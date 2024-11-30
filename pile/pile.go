@@ -16,16 +16,14 @@ type PileInterface interface {
 // ch: channel for manipulating cards in the pile.
 type Pile struct {
 	Name string
-	// Cards []string
-	ch chan string
+	ch   chan string
 }
 
 // New Pile instance.
 func NewPile(name string, size int) *Pile {
 	return &Pile{
 		Name: name,
-		// Cards: make([]string, 0, size),
-		ch: make(chan string, size),
+		ch:   make(chan string, size),
 	}
 }
 
@@ -51,7 +49,7 @@ func (p *Pile) Pop() string {
 	}
 }
 
-// Função para ver a capacidade e o tamanho do canal
+// Function that returns the capacity and size of the channel
 func (p *Pile) Capacity() (int, int) {
 	return len(p.ch), cap(p.ch)
 }
